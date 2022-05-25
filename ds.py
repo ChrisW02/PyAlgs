@@ -3,20 +3,28 @@ class Array_Seq:
         self.A = []
         self.size = 0
 
-    def __len__(self):  return self.size
+    def __len__(self):
+        return self.size
 
-    def __iter__(self): yield from self.A
+    def __iter__(self):
+        yield from self.A
 
     def build(self, X):
         self.A = [a for a in X]
         self.size = len(self.A)
 
-    def get_at(self, i): return self.A[i]
+    def get_at(self, i):
+        return self.A[i]
 
-    def set_at(self, i, x): self.A[i] = x
+    def set_at(self, i, x):
+        self.A[i] = x
 
     def __copy_forward(self, i, n, A, j):
         for k in range(n):
+            A[j + k] = self.A[i + k]
+
+    def __copy_backward(self, i, n, A, j):
+        for k in range(n - 1, -1, -1):
             A[j + k] = self.A[i + k]
 
     def insert_at(self, i, x):
@@ -155,3 +163,17 @@ class Dynamic_Array_Seq(Array_Seq):
         self.__copy_forward(0, self.size, A, 0)
         self.A = A
         self._compute_bounds()
+
+    def insert_last(self, x):
+        self._resize(self.size + 1)
+        self.A[self.size] = x
+        self.size += 1
+
+    def delete_last(self):
+        self.A[self.size - 1] = None
+        self.size -= 1
+        self._resize(self.size - 1)
+
+    def insert_at(self, i, x):
+        self.insert_last(None)
+        self.__copy_backward
